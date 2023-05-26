@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import redis.clients.jedis.Jedis;
+import zxj.jedis.util.JedisConnectionFactory;
 
 import java.util.Map;
 
@@ -16,9 +17,12 @@ public class JedisTest {
     @BeforeEach
     void setUp() {
         // 1.建立连接
-        jedis = new Jedis("localhost", 6379);
+        // jedis = new Jedis("localhost", 6379);
+        jedis = JedisConnectionFactory.getJedis();
+
         // 2.设置密码
         // jedis.auth("root");
+
         // 3. 选择库
         jedis.select(0);
     }
@@ -29,7 +33,7 @@ public class JedisTest {
     @Test
     void testString() {
         // 存入数据
-        String result = jedis.set("name", "周欣杰");
+        String result = jedis.set("name", "诸葛亮");
         System.out.println("result = " + result);
 
         // 获取数据
@@ -54,6 +58,7 @@ public class JedisTest {
     @AfterEach
     void tearDown() {
         if (jedis != null) {
+            // 关闭连接：连接对象没有被销毁，而是被归还到连接池中去了
             jedis.close();
         }
     }
